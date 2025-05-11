@@ -78,3 +78,41 @@ taskInput.addEventListener("keypress", (e) => {
 // Initialize the app
 showTasks();
 updateTaskCounter();
+
+
+
+let currentFilter = 'all';
+
+function setFilter(filter) {
+    currentFilter = filter;
+    filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+    });
+    showTasks();
+}
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => setFilter(btn.dataset.filter));
+});
+
+// Modify showTasks() to include filtering:
+function showTasks() {
+    taskList.innerHTML = '';
+    
+    const filteredTasks = tasks.filter(task => {
+        if (currentFilter === 'active') return !task.completed;
+        if (currentFilter === 'completed') return task.completed;
+        return true; // 'all' filter
+    });
+    
+    // ... rest of showTasks remains the same but use filteredTasks
+}
+
+
+
+clearCompletedBtn.addEventListener('click', () => {
+    tasks = tasks.filter(task => !task.completed);
+    saveTasks();
+    showTasks();
+    updateTaskCounter();
+});
